@@ -1,0 +1,222 @@
+﻿<!DOCTYPE html>
+<html lang="en-us" ng-app="myApp">
+    <head>
+        <title>AngularJS</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+        <meta charset="UTF-8">
+        <!-- load bootstrap and fontawesome via CDN -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" /> 
+        <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>           
+        <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+        <style>
+            html, body {
+                font-size: 1.1em;
+            }
+            .btn-primary{
+                    width: 100%!important;
+            }
+        </style>
+        <link href="StyleSheet.css" rel="stylesheet" />
+        <!-- load angular via CDN -->        
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js"></script>
+        <script src="https://code.angularjs.org/1.5.0-rc.2/angular-route.min.js"></script>
+        <script src="https://code.angularjs.org/1.5.0-rc.2/angular-resource.min.js"></script>
+        <script src="https://code.angularjs.org/1.5.0-rc.2/angular-messages.min.js"></script>
+        <script src="https://use.fontawesome.com/8bbc70ce04.js"></script>
+        <script src="app.js"></script>        
+    </head>
+    <body>
+
+        <header>
+			<nav class="navbar navbar-default">
+			<div class="container">
+				<div class="navbar-header">
+					<a class="navbar-brand" href="/">AngularJS</a>
+				</div>
+
+				<ul class="nav navbar-nav navbar-right">
+					<li><a href="#"><i class="fa fa-home"></i> Home</a></li>
+				</ul>
+			</div>
+			</nav>
+		</header>
+
+        <div class="container">
+            <div class="row insert-form" ng-controller="delUpdController">
+                <form class="form-group col-lg-8" ng-submit="save()" name="userForm" ng-controller="insertController">
+                    <div>
+                        <label for="firstName">First name:</label>
+                        <input type="text" id="firstName" ng-model="firstName" 
+                               name="firstName" 
+                               required
+                               />
+                        <div ng-messages="userForm.firstName.$error" ng-if="userForm.firstName.$touched">
+                            <div ng-message="required" class="alert alert-danger" role="alert">
+                                This field is required.
+                            </div>                            
+                        </div>                        
+                    </div>
+                    <div>
+                        <label for="lastName">Last name:</label>
+                        <input type="text" id="lastName" name="lastName" ng-model="lastName" required/>
+                        <div ng-messages="userForm.lastName.$error" ng-if="userForm.lastName.$touched">
+                            <div ng-message="required" class="alert alert-danger" role="alert" >
+                                This field is required.
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <label for="sa">Street address:</label>
+                        <input type="text" id="sa" name="sa" ng-model="sa" required/>
+                        <div ng-messages="userForm.sa.$error" ng-if="userForm.sa.$touched">
+                            <div ng-message="required" class="alert alert-danger" role="alert" >
+                                This field is required.
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <label for="sn">Street number:</label>
+                        <input type="text" id="sn" name="sn" ng-model="sn" required/>
+                        <div ng-messages="userForm.sn.$error" ng-if="userForm.sn.$touched">
+                            <div class="alert alert-danger" role="alert" ng-message="required">
+                                This field is required.
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <label for="city">City:</label>
+                        <input type="text" id="city" name="city" ng-model="city" required/>
+                        <div ng-messages="userForm.city.$error" ng-if="userForm.city.$touched">
+                            <div class="alert alert-danger" role="alert" ng-message="required">
+                                This field is required.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="email-container">
+                        <div>
+                            <label for="email">E-mail:</label>
+                            <input type="email" id="email" name="email" class="email-input" 
+                                   ng-model="email"                                   
+                                   required/>
+                            <button type="button" class="btn btn-primary-outline btn-email" addbuttons>Add another email</button>
+                        </div>
+                        <div ng-messages="userForm.email.$error" ng-if="userForm.email.$touched">
+                            <div ng-message="required" class="alert alert-danger">
+                                This field is required.
+                            </div>                            
+                        </div>
+                        <!-- Here will go other emails -->
+                    </div>
+                    <div class="phones-container">
+                        <div>
+                            <label for="phone">Phone:</label>
+                            <input type="tel" id="phone" name="phone" class="phone-input" ng-model="phone" />
+                            <button type="button" class="btn btn-primary-outline btn-phone" addphone>Add another phone number</button>
+                        </div>
+                        <!-- Here will go other phone numbers -->
+                    </div>
+                    <div class="tags-container">
+                        <div>
+                            <label for="tag">Tags:</label>
+                            <input type="text" id="tag" name="tag" class="tags-input" ng-model="tags" />
+                            <button type="button" class="btn btn-primary-outline btn-phone" addtags>Add another tag</button>
+                        </div>
+                        <!-- Here will go other tags -->
+                    </div>
+                    <button class="btn btn-primary btn-save">SAVE PERSON</button>
+                </form>
+
+                <div class="col-lg-12" ng-controller="showController">
+                    <h1 class="h1">List of saved persons: {{ dataArray.length }}</h1>
+                    <ul class="list-group">
+                        <li class="list-group-item" ng-repeat="p in dataArray" value="{{ p.id }}">
+                            <div class="name-field">
+                                <h3>{{ p.firstName }} {{ p.lastName}}</h3>
+                            </div>
+                            <div class="address-field">
+                                {{ p.streetAddress}} {{ p.streetNumber }}, {{ p.city }}
+                            </div>
+                            <div class="contact-field">
+                                <div class="divEmail">
+                                    E-mails:
+                                    <select class="ddlEmail">
+                                        <option ng-repeat="e in p.emails" value="{{e}}"> {{ e }} </option>
+                                    </select>
+                                </div>
+                                <div class="divPhone">
+                                    Phone numbers:
+                                    <select class="ddlPhone" value="{{ p.id }}">
+                                        <option ng-repeat="p in p.phones"> {{ p }} </option>
+                                    </select>
+                                </div>
+
+                            </div>
+                            <div class="tags-field">
+                                Tags:
+                                <div class="div-tags" ng-repeat="tags in p.tags">
+                                    <span value="{{ tags }}">{{ tags }}</span>
+                                </div>
+                            </div>
+                            <div class="btns-container">
+                                <button type="button" data-toggle="modal" data-target="#modalWindow" ng-click="update(p.id)" class="btn btn-primary btn-update">UPDATE</button>
+                                <button type="button" ng-click="delete(p.id)" class="btn btn-primary btn-delete">DELETE</button>                                
+                            </div>
+                        </li>
+                    </ul>
+                </div>                                
+
+                <div id="modalWindow" class="modal fade" tabindex="-1" role="dialog">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title">Update person {{ fullName }}</h4>
+                            </div>
+                            <form class="form-group" ng-submit="update()">
+                                <div class="modal-body">
+                                    <div>
+                                        <label for="updateFirstName">First Name:</label>
+                                        <input type="text" id="updateFirstName" name="updateFirstName" value="{{ firstNameU }}" />
+                                    </div>
+                                    <div>
+                                        <label for="updateLastName">Last Name:</label>
+                                        <input type="text" id="updateLastName" name="updateLastName" value="{{ lastNameU }}" />
+                                    </div>
+                                    <div>
+                                        <label for="updateSA">Street Address:</label>
+                                        <input type="text" id="updateSA" name="updateSA" value="{{ saU }}" />
+                                    </div>
+                                    <div>
+                                        <label for="updateSN">Street Number:</label>
+                                        <input type="text" id="updateSN" name="updateSN" value="{{ snU }}" />
+                                    </div>
+                                    <div>
+                                        <label for="updateCity">Street Number:</label>
+                                        <input type="text" id="updateCity" name="updateCity" value="{{ cityU }}" />
+                                    </div>
+                                    <div ng-repeat="e in emailsU">
+                                        <label>E-mail address:</label>
+                                        <input type="email" value="{{ e }}" class="email-updated" />
+                                    </div>
+                                    <div ng-repeat="p in phonesU">
+                                        <label>Phone number:</label>
+                                        <input type="tel" value="{{ p }}" class="phone-updated" />
+                                    </div>
+                                    <div ng-repeat="t in tagsU">
+                                        <label>Tag:</label>
+                                        <input type="text" value="{{ t }}" class="tags-updated"/>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button id="btnUpdate" type="submit" class="btn btn-primary update-btn">Update person</button>
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                </div>
+                            </form>
+                        </div><!-- /.modal-content -->
+                    </div><!-- /.modal-dialog -->
+                </div><!-- /.modal -->
+
+            </div>      
+		</div>
+    </body>
+</html>
